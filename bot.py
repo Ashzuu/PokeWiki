@@ -9,17 +9,16 @@ class Bot(commands.InteractionBot):
       print(f"Connecté en tant que {self.user}")
 
   async def on_ready(self):
-    acivite_streaming = disnake.Activity(name="Venez voir ce stream, je vous promets c'est sympa !",url="https://www.twitch.tv/ashzzzu",type=disnake.ActivityType.streaming)
+    activite_streaming = disnake.Activity(name="Venez voir ce stream, je vous promets c'est sympa !",url="https://www.twitch.tv/ashzzzu",type=disnake.ActivityType.streaming)
     
     
-    await self.change_presence(activity=acivite_streaming)
+    await self.change_presence(activity=activite_streaming)
 
 if __name__ == "__main__":
-  intents = disnake.Intents.all()
+  intents = disnake.Intents.default()
 
   bot = Bot(
-    intents = intents,
-    test_guilds = [1033089314755719178]
+    intents = intents
   )
 
   for file in os.listdir("./cogs"):
