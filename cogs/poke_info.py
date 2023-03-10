@@ -1,4 +1,4 @@
-import disnake,requests,random
+import disnake,random,requests
 from disnake.ext import commands
 import temp_embed.temp as tt
 import config as c
@@ -12,7 +12,10 @@ class Paginator(disnake.ui.View):
         super().__init__(timeout=60.0)
 
     async def on_timeout(self) -> None:
-        await self.message.delete()
+        try:
+            await self.message.delete()
+        except:
+            print('Pour une raison obscure, il est impossible de supprimer le message.')
 
     @disnake.ui.button(emoji="⬅️",label="- 1",style=disnake.ButtonStyle.blurple)
     async def previous_button(self,button:disnake.ui.Button,inter:disnake.MessageInteraction):
@@ -27,7 +30,7 @@ class Paginator(disnake.ui.View):
     async def page_1(self,button:disnake.ui.button,inter:disnake.MessageInteraction):
         await inter.response.edit_message(embed=tt.menu_1(self.pkmn[self.pokemon_id]),view=self)
 
-    @disnake.ui.button(label=f"ID:",style=disnake.ButtonStyle.blurple)
+    @disnake.ui.button(label="ID:", style=disnake.ButtonStyle.blurple)
     async def afficheur(self,button:disnake.ui.Button,inter:disnake.MessageInteraction):
         self.afficheur.label = f"ID : {self.pokemon_id}"
         await inter.response.edit_message(embed=tt.menu_2(self.pkmn[self.pokemon_id]),view=self)
@@ -57,10 +60,9 @@ class PokeInfo_Module(commands.Cog):
                         ):
         print(f"[COMMANDE POKE_INFO] dans le serveur {inter.guild.name}")
         try:    
-            lien_api_final = c.get_url_api()
-            await inter.send(f"*En cours de chargement... Nous cherchons {choix_poke} dans notre petite base de donnée* (enfin petite petite... Tout est relatif)")
+            await inter.send(f"*En cours de chargement... Nous cherchons {choix_poke} dans notre petite base de donnée* (enfin petite petite... Tout est relatif)", ephemeral=True)
             choix_poke = choix_poke.capitalize()
-            data = requests.get(lien_api_final).json()
+            data = c.get_url_api()
         ############################################## FIND_POKE ################################################
             id = None
             shiny_number = random.randint(0,100)
@@ -92,7 +94,7 @@ class PokeInfo_Module(commands.Cog):
             view = Paginator(id,data)
             await inter.edit_original_message(content="",embed=tt.menu_2(pkmn),view=view)
             view.message = await inter.original_response()
-        except:
+        except Exception:
             print(f"Attention, une erreur est survenue lors de l'exécution de /poke_info, ayant comme paramètre(s) : {choix_poke} dans le serveur {inter.guild.name}")
             await inter.edit_original_message(content="", embed=tt.erreur(msg="Une erreur est survenue, veuillez contacter l'administrateur afin de connaitre la cause de ce bug !"))
 
@@ -106,23 +108,15 @@ class PokeInfo_Module(commands.Cog):
                             mode:int=commands.Param(name="mode",description="Choisir un mode d'affichage des Pokémon",choices=choix_mode)
                             ):
         print(f"[COMMANDE LISTE_POKE] effectué dans {inter.guild.me}")
-        try:    
+        try:
             data_gen = requests.get(gen).json()
-            list_poke = []
-            for i in range(len(data_gen)):
-                list_poke.append(data_gen[i]["name"]["fr"])
-            if mode == 1 or mode == 2 or mode == 3:
+            list_poke = [data_gen[i]["name"]["fr"] for i in range(len(data_gen))]
+            if mode in {1, 2, 3}:
                 await inter.send(embed = tt.erreur("Cette fonctionnalité n'est pas encore disponible !"))
             elif mode == 0:
-                await inter.send(embed = disnake.Embed(
-                    title="Liste Poke",
-                    color=disnake.Colour.random(),
-                    description=", ".join(list_poke)
-                ).add_field(name="Nombre de Pokemon",value=f"{len(list_poke)} Pokemon dans cette génération !"
-            ).set_footer(text="Made by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png")
+                await inter.send(embed = tt.constructor_embed(titre="Liste Poke", description=", ".join(list_poke)).add_field(name="Nombre de Pokemon",value=f"{len(list_poke)} Pokemon dans cette génération !"), ephemeral=True
                 )
-                await inter.delete_original_message(delay=15)
-        except:
+        except Exception:
             await inter.send(embed=tt.erreur(msg="La commande n'a pas pû être exécuté ! Envoyé un message à l'administrateur du bot, ou bien envoyez un ``/feedback`` afin d'expliquer le problème."),ephemeral=True)
                         
 

@@ -117,9 +117,9 @@ def menu_evol_1(poke:list):
    
     return embed_menuevol1
 
-#
-#
-#
+#############################################################################################################################################
+##                                                           MENU FEEDBACKS                                                                ##
+#############################################################################################################################################
 
 def menu_feedback_avis(titre:str,auteur:str,message:str):
     if auteur == "":
@@ -130,3 +130,129 @@ def menu_feedback_avis(titre:str,auteur:str,message:str):
     ).set_footer(text="Message envoyé automatiquement depuis la commande /poke_feedback ou /poke_idee")
 
     return embed_menu
+
+
+#############################################################################################################################################
+##                                                           MENU GAMES                                                                    ##
+#############################################################################################################################################
+
+def menu_guess_presentation(types:str):
+    embed = disnake.Embed(
+        title=f"Devine le poids de ce Pokémon !" if types == "poids" else f"Devine la taille de ce Pokémon !",
+        description="Le but est simple : Un Pokémon va apparaitre, et vous devez deviner le poids de celui-ci ! \n:warning: ***Vous devez écrire uniquement un nombre, sans lettres ! (vous pouvez cependant utiliser des nombres à virgules !)***" if types=="poids" else "Le but est simple : Un Pokémon va apparaitre, et vous devez deviner la taille de celui-ci ! \n:warning: ***Vous devez écrire uniquement un nombre, sans lettres ! (vous pouvez cependant utiliser des nombres à virgules !)***",
+        color=disnake.Color.blurple()
+    ).set_thumbnail(url="https://cdn.discordapp.com/attachments/1064496577642766356/1078769557575041066/Pikaaaa.png"
+    ).set_footer(text="Data provenant de Poképedia \nMade by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png")
+
+    return embed
+
+
+def menu_guess(pokemon,types):
+    embed=disnake.Embed(
+        title="Devine le poids de ce Pokémon !" if types=="poids" else "Devine la taille de ce Pokémon !",
+        description="Le jeu est simple ! Fais une proposition de son poids ! Tu as le droit à 10 propositions, après tu as perdu !",
+        color=disnake.Colour.random()
+    ).set_thumbnail(url="https://cdn.discordapp.com/attachments/1064496577642766356/1078769557575041066/Pikaaaa.png"
+    ).set_image(pokemon["sprites"]["regular"]
+    ).add_field(name=pokemon["name"]["fr"], value="A ton avis, ce Pokémon pèse combien ? \n:warning: **Merci d'écrire seulement un nombre !!**")
+
+    return embed
+
+
+def menu_win_games(tours,types):
+    embed=disnake.Embed(
+        title="Bravo !",
+        description=f"Vous avez réussi, vous pouvez vous féliciter ! En plus de ça, vous avez trouvé le poids de ce Pokémon en {tours} tours !" if types=="poids" else f"Vous avez réussi, vous pouvez vous féliciter ! En plus de ça, vous avez trouvé la taille de ce Pokémon en {tours} tours !"
+    ).set_thumbnail(url="https://cdn.discordapp.com/attachments/1064496577642766356/1078769557575041066/Pikaaaa.png"
+    ).set_footer(text="Data provenant de Poképedia \nMade by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png")
+
+    return embed
+    
+def menu_loose_games():
+    embed=disnake.Embed(
+        title="Ah bah bien...",
+        description=f"Malgré les 10 tours, et les indications de notre cher bot, vous n'avez pas réussi... Je suis extrêment déçu de votre comportement !"
+    ).set_thumbnail(url="https://cdn.discordapp.com/attachments/1064496577642766356/1078769557860266015/pikaa_vener.gif"
+    ).set_footer(text="Data provenant de Poképedia \nMade by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png")
+
+    return embed
+
+def menu_plus_lourd(pokemon1, pokemon2):
+    
+    embed = disnake.Embed(
+        title="Quel Pokemon est le plus lourd ?",
+        description="Bienvenue dans un petit jeu ! Le but est de trouver le Pokemon le plus lourd !",
+        color=disnake.Colour.random()
+    ).set_footer(text="Data provenant de Poképedia \nMade by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png"
+    ).add_field(name="Qui est le plus lourd entre :", value=":one: " + pokemon1["name"]["fr"] + "\n:two: " + pokemon2["name"]["fr"] +"\n\nAttention vous avez 20 secondes pour répondre !")
+    
+    return embed
+
+def menu_win(pokemon):
+    embed=disnake.Embed(
+        title="Féliciations !",
+        description=f"Oh mais que vois-je ! *Vous avez réussi*, je suis très fier de vous bravo ! Pour rejouer, tu peux exécuter de nouveau la commande, si tu le souhaites bien sûr ! \n**La réponse était donc bien : " + pokemon["name"]["fr"] + "**",
+        color=disnake.Colour.green()
+    ).set_footer(text="Data provenant de Poképedia \nMade by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png"
+    ).set_thumbnail("https://cdn.discordapp.com/attachments/1064496577642766356/1078769557575041066/Pikaaaa.png")
+
+    return embed
+
+def menu_loose(pokemon):
+    embed=disnake.Embed(
+        title="Pardon !",
+        description=f"Je n'en crois pas mes yeux, vous venez de vous tromper ! Pikachu n'est pas content... Rejouez et changez moi ça, pour que Pikachu soit content !\n**La bonne réponse était donc : " + pokemon["name"]["fr"] + "**",
+        color=disnake.Color.red()
+    ).set_footer(text="Data provenant de Poképedia \nMade by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png"
+    ).set_thumbnail("https://cdn.discordapp.com/attachments/1064496577642766356/1078769557860266015/pikaa_vener.gif")
+
+    return embed
+
+def menu_guess_pokemon(pokemon):
+    embed = disnake.Embed(
+        title="Trouve le Pokémon",
+        description="Voici un pokémon, tu dois connaitre son nom et l'écrire à la suite de ce message !",
+        color=disnake.Colour.blurple()
+    ).set_image(url=pokemon["sprites"]["regular"]
+    ).set_footer(text="Data provenant de Poképedia \nMade by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png"
+    )
+
+    return embed
+
+
+def log_embed(cas:str):
+    embed = disnake.Embed(
+        title="Message du bot !",
+        description=f"Le bot vous envoie un message pour le cas suivant : {cas}",
+        color=disnake.Color.blurple()
+    ).set_footer(text="Made by Ashz#6909", icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png")
+
+    return embed
+
+
+def embed_command():
+    embed:disnake.Embed = disnake.Embed(
+            title="Commandes disponibles sur le bot",
+            color=disnake.Color.blurple()
+        ).add_field(name="Commandes Pokédex",value="</poke_info:1078821926706872355> : Afficher les informations générales d'un Pokémon\n</shiny:1078684235935780914> : Afficher le sprite shiny d'un Pokémon\n</poke_evol:1078821926706872358> : Affiche la ligne évolutive d'un Pokémon\n</list_poke:1078821926706872356> Affiche les Pokémon d'une génération donnée\n",inline=False
+        ).add_field(name="Général",value="</help:1078821926706872357> : Afficher une page permettant d'obtenir de l'assitance avec le bot !\n</info:1078821926706872352> : Afficher des informations à propos du bot\n</ping:1078821926706872350> Afficher les différentes informations de connexion du bot\n</poke_feedback:1078821926706872351> : Donner votre avis sur le bot\n</poke_idee:1078821926706872354> : Donner des idées concernants le bot",inline=False
+        ).add_field(name="Jeux",value="</games:1078985626327732235> : Petits jeux sur le thème de Pokémon",inline=False
+        ).add_field(name=":warning: Attention !",value="***Il faut écrire correctement le nom du Pokémon pour toutes les commandes où le Pokémon est demandé, même avec les accents !***",inline=False
+        ).set_footer(text="Made by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png")
+    
+    return embed
+
+#############################################################################################################################################
+##                                                           MENU CONSTRUCTOR                                                              ##
+#############################################################################################################################################
+
+def constructor_embed(titre:str=None,description:str=None,icon=None,image=None):
+    embed1 = disnake.Embed(
+        title=titre,
+        description=description,
+        color=disnake.Colour.blurple()
+    ).set_thumbnail(url=icon
+    ).set_image(url=image
+    ).set_footer(text="Made by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png")
+
+    return embed1

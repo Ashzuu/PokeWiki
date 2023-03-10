@@ -1,4 +1,4 @@
-import disnake,requests
+import disnake
 from disnake.ext import commands
 import temp_embed.temp as tt
 import config as c
@@ -21,9 +21,8 @@ class ShinyModule(commands.Cog):
         print(f"[COMMANDE SHINY] dans le serveur {inter.guild.name}")
         try:    
             await inter.send(content=f"Recherche de {choix_poke} en cours...")
-            lien_api = c.get_url_api()
             choix_poke = choix_poke.capitalize()
-            data = requests.get(lien_api).json()
+            data = c.get_url_api()
             id = None
             for i in range(len(data)):
                 if data[i]["name"]["fr"] == choix_poke:
@@ -34,12 +33,7 @@ class ShinyModule(commands.Cog):
             
             if pkmn["sprites"]["shiny"] == None:
                 return await inter.edit_original_message(content="",embed=tt.erreur(f"{choix_poke} n'a pas de version shiny"))
-            await inter.edit_original_message(content="",embed=disnake.Embed(
-                title=f":sparkles: _{choix_poke}_ :sparkles:",
-                description=f"Vous avez demandé la version shiny de {choix_poke}, vous l'avez ! Elle est *belle non* ! Non ? Déçu...",
-                color=disnake.Color.blurple())
-                .set_image(pkmn["sprites"]["shiny"])
-                .set_footer(text="Images provenant de Poképedia \nMade by Ashz#6909",icon_url="https://cdn.discordapp.com/attachments/1060987754839818314/1060988125494657054/Pdp_Discord.png")
+            await inter.edit_original_message(content="",embed=tt.constructor_embed(titre=f":sparkles: _{choix_poke}_ :sparkles:", description=f"Vous avez demandé la version shiny de {choix_poke}, vous l'avez ! Elle est *belle non* ! Non ? Déçu...",image=pkmn["sprites"]["shiny"])
             )
         except:
             print(f"Attention, une erreur est survenue lors de l'exécution de /shiny, ayant comme paramètre(s) : {choix_poke} dans le serveur {inter.guild.name}")

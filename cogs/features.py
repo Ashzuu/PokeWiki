@@ -1,4 +1,4 @@
-import disnake,requests,random
+import disnake
 from disnake.ext import commands
 import temp_embed.temp as tt
 
